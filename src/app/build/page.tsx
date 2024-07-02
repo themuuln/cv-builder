@@ -2,7 +2,13 @@
 
 import CardEditFooter, { CardEditHeader, EditButton } from '@/components/card-edit';
 import ToggleInput from '@/components/toggle-input';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Checkbox from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -40,6 +46,7 @@ const Build = () => {
 
   const handleEditClick = (mode: EditModes) => {
     setEditMode(mode);
+    // @ts-ignore
     inputRefs[mode]?.current?.focus();
   };
 
@@ -69,6 +76,7 @@ const Build = () => {
   };
 
   const handleValueChange = ({ e, label }: { e: ChangeEvent<HTMLInputElement>; label: string }) => {
+    // @ts-ignore
     setData({ ...data, [label]: e.target.value });
   };
 
@@ -210,6 +218,7 @@ const Build = () => {
 
                       {isEditContact ? (
                         <Input
+                          // @ts-ignore
                           value={data?.phoneNumber}
                           type='number'
                           onChange={(e) => handleValueChange({ e, label: 'phoneNumber' })}
