@@ -1,14 +1,73 @@
+'use client';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import useAuth from '@/hooks/useAuth';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Button } from '../ui/button';
+import { ThemeToggler } from './ThemeToggler';
+import { supabase } from '@/lib/initSupabase';
 
 const Header = () => {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  const onSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <header className='backdrop-blur max-h-20 fixed top-0 w-full flex justify-center'>
-      <div className='container py-2 flex flex-row w-full justify-between'>
+    <header className='h-20 border-b justify-center flex items-center'>
+      <div className='container items-center justify-between flex'>
         <Link href={'/'}>
-          <div className='uppercase text-lg font-semibold cursor-pointer'>CV Builder</div>
+          <div className='uppercase font-bold text-lg'>Logo</div>
         </Link>
-        <div></div>
-        <div></div>
+        <div className='flex flex-row space-x-4'>
+          <ThemeToggler />
+          {user?.role === 'authenticated' ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar>
+                  <AvatarImage src={''} />
+                  <AvatarFallback>CB</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/profile');
+                  }}
+                >
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onSignOut}>Log out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className='flex space-x-4 items-center'>
+              <Link href={'/login'}>
+                <Button variant={'secondary'}>Login</Button>
+              </Link>
+              <Link href={'/register'}>
+                <Button>Sign up</Button>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
