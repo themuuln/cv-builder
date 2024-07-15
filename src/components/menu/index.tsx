@@ -1,12 +1,8 @@
-import React from 'react';
-
 const Menu = () => {
   return (
-    <>
-      <nav>
-        <p>Assistant</p>
-      </nav>
-    </>
+    <nav className='w-20 h-screen bg-red-500'>
+      <p>Assistant</p>
+    </nav>
   );
 };
 
