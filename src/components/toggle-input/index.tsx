@@ -9,15 +9,28 @@ type ToggleInputProps = {
   value: string;
   handleValueChange: ({ e, label }: { e: ChangeEvent<HTMLInputElement>; label: string }) => void;
   handleEditClick: (mode: EditModes) => void;
-  inputRefs: {
-    [mode: string]: React.RefObject<HTMLInputElement>;
-  };
+  // inputRefs: {
+  //   [mode: string]: RefObject<HTMLInputElement>;
+  // };
   mode: EditModes;
   variant: string;
 };
 
-const ToggleInput = ({ isEdit, label, value, handleValueChange, handleEditClick, inputRefs, mode, variant }: ToggleInputProps) => {
-  let textStyle = ``;
+const ToggleInput = forwardRef<HTMLDivElement, ToggleInputProps>(
+  (
+    {
+      isEdit,
+      label,
+      value,
+      handleValueChange,
+      handleEditClick,
+      // inputRefs,
+      mode,
+      variant,
+    },
+    ref,
+  ) => {
+    let textStyle = ``;
 
   (() => {
     switch (variant) {
@@ -43,9 +56,13 @@ const ToggleInput = ({ isEdit, label, value, handleValueChange, handleEditClick,
     <>
       <div className='flex flex-row space-x-4'>
         {isEdit ? (
-          <>
-            <Input ref={inputRefs[mode]} name={label} className={textStyle} value={value} onChange={(e) => handleValueChange({ e, label })} />
-          </>
+          <Input
+            // ref={inputRefs[mode]}
+            name={label}
+            className={textStyle}
+            value={value}
+            onChange={(e) => handleValueChange({ e, label })}
+          />
         ) : (
           <p className={textStyle}>{isEmpty(value) ? camelCaseToSpaced(label) : value}</p>
         )}
