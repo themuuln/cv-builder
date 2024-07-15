@@ -8,20 +8,19 @@ import useLogic from './logic';
 
 const Build = () => {
   const l = useLogic();
-  const { data } = l;
 
   return (
     <div onKeyDown={l.handleKeyDown} className='md:pt-4 w-full'>
       <Container className='space-y-4'>
         <Card>
-          <Heading data={data} l={l} />
+          <Heading data={l.data} l={l} />
           <CardContent>
             <GridContainer>
-              <Group.Contact data={data} l={l} />
-              <Group.MyProfile data={data} l={l} />
-              <Group.Skills data={data} l={l} />
-              <Group.Experience data={data} l={l} />
-              <Group.Languages data={data} l={l} />
+              <Group.Contact data={l.data} l={l} />
+              <Group.MyProfile data={l.data} l={l} />
+              <Group.Skills data={l.data} l={l} />
+              <Group.Experience data={l.data} l={l} />
+              <Group.Languages data={l.data} l={l} />
             </GridContainer>
           </CardContent>
         </Card>
