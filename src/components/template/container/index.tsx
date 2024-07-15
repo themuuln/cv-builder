@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,6 +9,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { cn } from '@/lib/utils';
 import { SlashIcon } from '@radix-ui/react-icons';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 import { Fragment, type ReactNode } from 'react';
 
@@ -17,7 +20,9 @@ const Container = ({
   children: ReactNode;
   className?: string;
 }) => {
-  const breadcrumbs = window.location.pathname
+  const pathname = usePathname();
+
+  const breadcrumbs = pathname
     .slice(1)
     .split('/')
     .filter(Boolean)
