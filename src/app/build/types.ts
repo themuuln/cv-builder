@@ -1,3 +1,5 @@
+import type { ElementRef } from 'react';
+
 export enum EditModes {
   NONE,
   NAME,
@@ -11,7 +13,7 @@ export enum EditModes {
   PROJECTS,
 }
 
-export type UserData = {
+export type ResumeData = {
   name: string;
   jobTitle: string;
   location: string;
@@ -48,3 +50,5 @@ export type UserData = {
     tools: string[];
   };
 } | null;
+
+export type InputRefType = ElementRef<'input'>;
