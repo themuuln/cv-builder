@@ -1,5 +1,4 @@
-import type { CoreLogic } from '@/app/build/logic';
-import type { ResumeData } from '@/app/build/types';
+import type { CoreLogic, ResumeData } from '@/app/build/types';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 
 type LanguagesProps = {

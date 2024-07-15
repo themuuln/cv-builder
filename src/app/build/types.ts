@@ -1,4 +1,11 @@
-import type { ElementRef } from 'react';
+import type {
+  ChangeEvent,
+  Dispatch,
+  ElementRef,
+  KeyboardEvent,
+  RefObject,
+  SetStateAction,
+} from 'react';
 
 export enum EditModes {
   NONE,
@@ -14,6 +21,7 @@ export enum EditModes {
 }
 
 export type ResumeData = {
+  id: string | null;
   name: string;
   jobTitle: string;
   location: string;
@@ -52,3 +60,25 @@ export type ResumeData = {
 } | null;
 
 export type InputRefType = ElementRef<'input'>;
+
+export type CoreLogic = {
+  editMode: EditModes;
+  editCard: string;
+  data: ResumeData;
+  handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+  handleValueChange: ({
+    e,
+    label,
+  }: {
+    e: ChangeEvent<HTMLInputElement>;
+    label: string;
+  }) => void;
+  handleEditClick: (mode: EditModes) => void;
+  isEditContact: boolean;
+  setEditCard: Dispatch<SetStateAction<string>>;
+  onSaveEditCard: () => void;
+  onCancelEditCard: () => void;
+  isEditSummary: boolean;
+  isEditSkills: boolean;
+  inputRefsList: Record<EditModes, RefObject<HTMLInputElement>>;
+};

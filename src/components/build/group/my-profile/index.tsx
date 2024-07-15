@@ -1,5 +1,4 @@
-import type { CoreLogic } from '@/app/build/logic';
-import { type ResumeData } from '@/app/build/types';
+import { type CoreLogic, type ResumeData } from '@/app/build/types';
 import CardEditFooter, { CardEditHeader } from '@/components/card-edit';
 import { Card, CardContent } from '@/components/ui/card';
 import Input from '@/components/ui/input-custom';

@@ -1,39 +1,15 @@
+import useAuth from '@/hooks/useAuth';
+import { supabase } from '@/lib/initSupabase';
 import {
   useEffect,
   useRef,
   useState,
   type ChangeEvent,
-  type Dispatch,
   type KeyboardEvent,
   type RefObject,
-  type SetStateAction,
 } from 'react';
 import { toast } from 'sonner';
-import { EditModes, type ResumeData } from './types';
-import { supabase } from '@/lib/initSupabase';
-import useAuth from '@/hooks/useAuth';
-
-export type CoreLogic = {
-  editMode: EditModes;
-  editCard: string;
-  data: ResumeData;
-  handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
-  handleValueChange: ({
-    e,
-    label,
-  }: {
-    e: ChangeEvent<HTMLInputElement>;
-    label: string;
-  }) => void;
-  handleEditClick: (mode: EditModes) => void;
-  isEditContact: boolean;
-  setEditCard: Dispatch<SetStateAction<string>>;
-  onSaveEditCard: () => void;
-  onCancelEditCard: () => void;
-  isEditSummary: boolean;
-  isEditSkills: boolean;
-  inputRefsList: Record<EditModes, RefObject<HTMLInputElement>>;
-};
+import { EditModes, type CoreLogic, type ResumeData } from './types';
 
 const useLogic = (): CoreLogic => {
   const { user } = useAuth();
@@ -41,6 +17,7 @@ const useLogic = (): CoreLogic => {
   const [editMode, setEditMode] = useState<EditModes>(EditModes.NONE);
   const [hasFetched, setHasFetched] = useState<boolean>(false);
   const [data, setData] = useState<ResumeData>({
+    id: null,
     name: '',
     jobTitle: '',
     location: '',
@@ -77,6 +54,25 @@ const useLogic = (): CoreLogic => {
     [EditModes.PROJECTS]: projectsInputRef,
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from('resume-data')
+        .select('*')
+        .eq('owner', user.id);
+
+      if (error) {
+        toast.error('Error fetching data');
+        return;
+      }
+
+      console.log(`💻 ~ file: logic.ts:151 ~ fetchData ~ data:`, data);
+      setData(data[0]);
+    };
+
+    fetchData().then(() => setHasFetched(true));
+  }, [supabase, hasFetched, user]);
+
   const handleEditClick = async (mode: EditModes) => {
     await setEditMode(mode);
     inputRefsList[mode]?.current?.focus();
@@ -93,20 +89,6 @@ const useLogic = (): CoreLogic => {
     saveData();
     setEditMode(EditModes.NONE);
     e.currentTarget.blur();
-    showToast();
-  };
-
-  const showToast = () => {
-    toast('Changes saved', {
-      description: `Your latest changes on ${EditModes[editMode]} were saved!`,
-      action: {
-        label: 'Undo',
-        onClick: () => {
-          // TODO: finish undo
-          console.log('Undo');
-        },
-      },
-    });
   };
 
   const handleValueChange = ({
@@ -125,40 +107,41 @@ const useLogic = (): CoreLogic => {
   };
 
   const onSaveEditCard = () => {
-    setEditCard('');
+    onCancelEditCard();
   };
 
-  const saveData = () => {
-    console.log(`💻 ~ file: logic.ts:137 ~ saveData ~ data:`, data);
-    // @ts-ignore
-    const { error } = supabase
-      .from('resume-data')
-      .upsert(data)
-      .eq('owner', user.id);
+  const saveData = async () => {
+    let response;
+    if (data?.id) {
+      response = await supabase
+        .from('resume-data')
+        .upsert(data)
+        .eq('owner', user.id);
+    } else {
+      response = await supabase.from('resume-data').insert(data);
+    }
+    const { error } = response;
 
-    console.log(`💻 ~ file: logic.ts:133 ~ saveData ~ error:`, error);
-  };
+    if (error) {
+      toast.error('Error saving data');
+      return;
+    }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!hasFetched && user?.id) {
-        const { data, error } = await supabase
-          .from('resume-data')
-          .select('*')
-          .eq('owner', user.id);
-
-        if (error) {
-          toast.error('Error fetching data');
-          return;
-        }
-
-        console.log(`💻 ~ file: logic.ts:151 ~ fetchData ~ data:`, data);
-        setData(data[0]);
-      }
+    const showToast = () => {
+      toast('Changes saved', {
+        description: `Your latest changes on ${EditModes[editMode]} were saved!`,
+        action: {
+          label: 'Undo',
+          onClick: () => {
+            // TODO: finish undo
+            console.log('Undo');
+          },
+        },
+      });
     };
 
-    fetchData().then(() => setHasFetched(true));
-  }, [supabase, hasFetched, user]);
+    showToast();
+  };
 
   const isEditContact = editCard === 'Contact';
   const isEditSummary = editCard === 'My Profile';

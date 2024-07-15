@@ -1,5 +1,4 @@
-import type { CoreLogic } from '@/app/build/logic';
-import { EditModes, type ResumeData } from '@/app/build/types';
+import { EditModes, type CoreLogic, type ResumeData } from '@/app/build/types';
 import CardEditFooter, { CardEditHeader } from '@/components/card-edit';
 import { Card, CardContent } from '@/components/ui/card';
 import Checkbox from '@/components/ui/checkbox';

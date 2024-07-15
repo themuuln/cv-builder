@@ -1,5 +1,4 @@
-import type { CoreLogic } from '@/app/build/logic';
-import { EditModes, type ResumeData } from '@/app/build/types';
+import { EditModes, type CoreLogic, type ResumeData } from '@/app/build/types';
 import ToggleInput from '@/components/toggle-input';
 import { CardHeader } from '@/components/ui/card';
 
