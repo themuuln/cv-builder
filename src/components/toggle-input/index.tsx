@@ -1,6 +1,8 @@
-import type { EditModes } from '@/app/build/types';
+'use client';
+
+import { EditModes } from '@/app/build/types';
 import { camelCaseToSpaced, isEmpty } from '@/lib/utils';
-import { type ChangeEvent, type RefObject, forwardRef } from 'react';
+import { type ChangeEvent, type RefObject, forwardRef, useEffect } from 'react';
 import Input from '../ui/input-custom';
 
 type ToggleInputProps = {
@@ -15,27 +17,24 @@ type ToggleInputProps = {
     label: string;
   }) => void;
   handleEditClick: (mode: EditModes) => void;
-  // inputRefs: {
-  //   [mode: string]: RefObject<HTMLInputElement>;
-  // };
+  inputRefsList: {
+    [mode: string]: RefObject<HTMLInputElement>;
+  };
   mode: EditModes;
   variant: string;
 };
 
 const ToggleInput = forwardRef<HTMLDivElement, ToggleInputProps>(
-  (
-    {
-      isEdit,
-      label,
-      value,
-      handleValueChange,
-      handleEditClick,
-      // inputRefs,
-      mode,
-      variant,
-    },
-    ref,
-  ) => {
+  ({
+    isEdit,
+    label,
+    value,
+    handleValueChange,
+    handleEditClick,
+    inputRefsList,
+    mode,
+    variant,
+  }) => {
     let textStyle = ``;
 
     (() => {
@@ -59,10 +58,10 @@ const ToggleInput = forwardRef<HTMLDivElement, ToggleInputProps>(
     })();
 
     return (
-      <div ref={ref} className='flex flex-row space-x-4'>
+      <div className='flex flex-row space-x-4'>
         {isEdit ? (
           <Input
-            // ref={inputRefs[mode]}
+            ref={inputRefsList[mode]}
             name={label}
             className={textStyle}
             value={value}
@@ -76,7 +75,9 @@ const ToggleInput = forwardRef<HTMLDivElement, ToggleInputProps>(
         {!isEdit && (
           <button
             className='font-semibold text-gray-500 uppercase'
-            onClick={() => handleEditClick(mode)}
+            onClick={() => {
+              handleEditClick(mode);
+            }}
           >
             Edit
           </button>
