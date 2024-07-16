@@ -86,6 +86,7 @@ export type CoreLogic = {
   onCancelEditCard: () => void;
   isEditSummary: boolean;
   isEditSkills: boolean;
+  isEditLanguages: boolean;
   inputRefsList: Record<EditModes, RefObject<HTMLInputElement>>;
   isLoading: LoadingType;
   setIsLoading: Dispatch<SetStateAction<LoadingType>>;
