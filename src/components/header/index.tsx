@@ -9,16 +9,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import useAuth from '@/hooks/useAuth';
+import { supabase } from '@/lib/initSupabase';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ThemeToggler } from './ThemeToggler';
-import { supabase } from '@/lib/initSupabase';
 
 const Header = () => {
   const { user } = useAuth();
-  const router = useRouter();
 
   const onSignOut = async () => {
     try {
@@ -47,13 +45,13 @@ const Header = () => {
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
+                {/* <DropdownMenuItem
                   onClick={() => {
                     router.push('/profile');
                   }}
                 >
                   Profile
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuItem onClick={onSignOut}>Log out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
