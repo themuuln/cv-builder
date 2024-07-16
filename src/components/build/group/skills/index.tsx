@@ -1,11 +1,16 @@
 'use client';
 
-import { TrashIcon, PlusIcon } from '@radix-ui/react-icons';
 import { type CoreLogic, type ResumeData } from '@/app/build/types';
-import CardEditFooter, { CardEditHeader } from '@/components/card-edit';
+import { CardEditFooter, UniversalCardHeader } from '@/components/card-edit';
 import Button from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import {
+  CaretDownIcon,
+  CaretUpIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@radix-ui/react-icons';
 import { toast } from 'sonner';
 import NoData from '../../no-data';
 
@@ -28,7 +33,35 @@ const renderSkills = ({ l }: { l: CoreLogic }) => {
       toast('Skill removed successfully');
     };
     return l.isEditSkills ? (
-      <div key={index} className='flex flex-row gap-2'>
+      <div key={index} className='flex flex-row items-center gap-2'>
+        <div className='flex flex-col space-y-1'>
+          <div
+            onClick={() => {
+              const newSkills = [...l.data!.skills];
+              const temp = newSkills[index];
+              newSkills[index] = newSkills[index - 1];
+              newSkills[index - 1] = temp;
+              // @ts-ignore
+              l.setData({ ...l.data, skills: newSkills });
+            }}
+            className='cursor-pointer'
+          >
+            <CaretUpIcon className='h-4 w-4' />
+          </div>
+          <div
+            onClick={() => {
+              const newSkills = [...l.data!.skills];
+              const temp = newSkills[index];
+              newSkills[index] = newSkills[index + 1];
+              newSkills[index + 1] = temp;
+              // @ts-ignore
+              l.setData({ ...l.data, skills: newSkills });
+            }}
+            className='cursor-pointer'
+          >
+            <CaretDownIcon className='h-4 w-4' />
+          </div>
+        </div>
         <Input
           value={skill}
           onChange={(e) => {
@@ -73,7 +106,7 @@ const Skills: React.FC<SkillsProps> = ({ data, l }): JSX.Element => {
 
   return (
     <Card className={`${l.isEditSkills ? 'border-blue-500' : ''}`}>
-      <CardEditHeader setCardEdit={l.setEditCard} title='Skills' />
+      <UniversalCardHeader setCardEdit={l.setEditCard} title='Skills' />
       <CardContent className='space-y-2'>
         {renderSkills({ l })}
         {l.isEditSkills && (
