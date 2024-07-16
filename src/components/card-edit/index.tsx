@@ -4,23 +4,6 @@ import { Pencil1Icon } from '@radix-ui/react-icons';
 import type { Dispatch, SetStateAction } from 'react';
 import { Button } from '../ui/button';
 
-export const EditButton = ({
-  setEditCard,
-  type,
-}: {
-  setEditCard: Dispatch<SetStateAction<CardList>>;
-  type: string;
-}) => {
-  return (
-    <div
-      className='p-2 rounded transition-all duration-300 hover:text-primary-foreground hover:bg-primary'
-      onClick={() => setEditCard(type as CardList)}
-    >
-      <Pencil1Icon />
-    </div>
-  );
-};
-
 export const CardEditFooter = ({
   condition,
   onCancel,
@@ -56,8 +39,15 @@ export const UniversalCardHeader = ({
   return (
     <CardHeader>
       <div className='flex items-center flex-row justify-between'>
-        <div>{title}</div>
-        <EditButton setEditCard={setCardEdit} type={title} />
+        <div>
+          <h2 className='md:text-xl font-semibold'>{title}</h2>
+        </div>
+        <div
+          className='p-2 rounded transition-all duration-300 hover:text-primary-foreground hover:bg-primary'
+          onClick={() => setCardEdit(title as CardList)}
+        >
+          <Pencil1Icon />
+        </div>
       </div>
     </CardHeader>
   );
