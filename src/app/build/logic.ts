@@ -11,6 +11,7 @@ import {
 import { toast } from 'sonner';
 import {
   EditModes,
+  type CardList,
   type CoreLogic,
   type LoadingType,
   type ResumeData,
@@ -18,7 +19,7 @@ import {
 
 const useLogic = (): CoreLogic => {
   const { user } = useAuth();
-  const [editCard, setEditCard] = useState<string>('');
+  const [editCard, setEditCard] = useState<CardList>('');
   const [editMode, setEditMode] = useState<EditModes>(EditModes.NONE);
   const [data, setData] = useState<ResumeData>({
     id: null,
@@ -93,16 +94,18 @@ const useLogic = (): CoreLogic => {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === 'Escape') {
+    if (e.key === 'Enter') {
+      const onSave = (e: KeyboardEvent<HTMLInputElement>) => {
+        saveData();
+        setEditMode(EditModes.NONE);
+        e.currentTarget.blur();
+      };
+
       onSave(e);
       setEditCard('');
+    } else if (e.key === 'Escape') {
+      setEditCard('');
     }
-  };
-
-  const onSave = (e: KeyboardEvent<HTMLInputElement>) => {
-    saveData();
-    setEditMode(EditModes.NONE);
-    e.currentTarget.blur();
   };
 
   const handleValueChange = ({
@@ -160,6 +163,7 @@ const useLogic = (): CoreLogic => {
   const isEditContact = editCard === 'Contact';
   const isEditSummary = editCard === 'My Profile';
   const isEditSkills = editCard === 'Skills';
+  const isEditLanguages = editCard === 'Languages';
 
   return {
     editMode,

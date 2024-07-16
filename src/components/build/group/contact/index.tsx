@@ -1,5 +1,4 @@
 import { EditModes, type CoreLogic, type ResumeData } from '@/app/build/types';
-import CardEditFooter, { CardEditHeader } from '@/components/card-edit';
 import { Card, CardContent } from '@/components/ui/card';
 import Checkbox from '@/components/ui/checkbox';
 import Input from '@/components/ui/input-custom';
@@ -8,6 +7,7 @@ import { isEmpty } from '@/lib/utils';
 import type { FC } from 'react';
 import NoData from '../../no-data';
 import Skeleton from '@/components/ui/skeleton';
+import { UniversalCardHeader, CardEditFooter } from '@/components/card-edit';
 
 type ContactProps = {
   l: CoreLogic;
@@ -17,7 +17,7 @@ type ContactProps = {
 const Contact: FC<ContactProps> = ({ l, data }): JSX.Element => {
   return (
     <Card className={`${l.isEditContact ? 'border-blue-500' : ''}`}>
-      <CardEditHeader setCardEdit={l.setEditCard} title='Contact' />
+      <UniversalCardHeader setCardEdit={l.setEditCard} title='Contact' />
       <CardContent>
         <div className='space-y-4'>
           <div className='space-y-1'>

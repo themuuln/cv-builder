@@ -1,5 +1,5 @@
 import { type CoreLogic, type ResumeData } from '@/app/build/types';
-import CardEditFooter, { CardEditHeader } from '@/components/card-edit';
+import { UniversalCardHeader, CardEditFooter } from '@/components/card-edit';
 import { Card, CardContent } from '@/components/ui/card';
 import Input from '@/components/ui/input-custom';
 
@@ -11,7 +11,7 @@ type MyProfileProps = {
 const MyProfile: React.FC<MyProfileProps> = ({ data, l }): JSX.Element => {
   return (
     <Card className={`${l.isEditSummary ? 'border-blue-500' : ''} col-span-3`}>
-      <CardEditHeader setCardEdit={l.setEditCard} title='My Profile' />
+      <UniversalCardHeader setCardEdit={l.setEditCard} title='My Profile' />
       <CardContent>
         {l.isEditSummary ? (
           <Input

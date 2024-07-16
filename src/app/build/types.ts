@@ -7,6 +7,14 @@ import type {
   SetStateAction,
 } from 'react';
 
+export type CardList =
+  | 'Contact'
+  | 'My Profile'
+  | 'Skills'
+  | 'Experience'
+  | 'Languages'
+  | '';
+
 export enum EditModes {
   NONE,
   NAME,
@@ -73,7 +81,7 @@ export type CoreLogic = {
   }) => void;
   handleEditClick: (mode: EditModes) => void;
   isEditContact: boolean;
-  setEditCard: Dispatch<SetStateAction<string>>;
+  setEditCard: Dispatch<SetStateAction<CardList>>;
   onSaveEditCard: () => void;
   onCancelEditCard: () => void;
   isEditSummary: boolean;
