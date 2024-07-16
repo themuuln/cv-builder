@@ -10,7 +10,7 @@ const Build = () => {
   const l = useLogic();
 
   return (
-    <div onKeyDown={l.handleKeyDown} className='md:pt-4 w-full'>
+    <div onKeyDown={l.handleKeyDown} className='py-4 w-full'>
       <Container className='space-y-4'>
         <Card>
           <Heading data={l.data} l={l} />

@@ -13,6 +13,7 @@ export type CardList =
   | 'Skills'
   | 'Experience'
   | 'Languages'
+  | 'Projects'
   | '';
 
 export enum EditModes {
@@ -27,6 +28,26 @@ export enum EditModes {
   EXPERIENCE,
   PROJECTS,
 }
+
+export type ExperienceType = {
+  company: string;
+  position: string;
+  usedSkills: string[];
+  description: string[];
+  startDate: string;
+  endDate: string;
+};
+
+export type ExperienceKeys = keyof ExperienceType;
+
+export type ProjectsType = {
+  name: string;
+  usedSkills: string[];
+  description: string[];
+  startDate: string;
+  endDate: string;
+  link: string;
+}[];
 
 export type ResumeData = {
   id: string | null;
@@ -45,31 +66,19 @@ export type ResumeData = {
     endDate: Date;
   }[];
   summary: string;
-  experience: {
-    company: string;
-    position: string;
-    usedSkills: string[];
-    description: string[];
-    startDate: Date;
-    endDate: Date;
-  }[];
-  projects: {
-    name: string;
-    usedSkills: string[];
-    description: string[];
-    startDate: Date;
-    endDate: Date;
-    link: string;
-  }[];
+  experience: ExperienceType[];
+  projects: ProjectsType[];
   skills: string[];
 } | null;
 
 export type InputRefType = ElementRef<'input'>;
 
 export type CoreLogic = {
-  editMode: EditModes;
-  editCard: string;
-  data: ResumeData;
+  setEditCard: Dispatch<SetStateAction<CardList>>;
+  onSaveEditCard: () => void;
+  onCancelEditCard: () => void;
+  setIsLoading: Dispatch<SetStateAction<LoadingType>>;
+  saveData: () => void;
   setData: Dispatch<SetStateAction<ResumeData>>;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   handleValueChange: ({
@@ -80,17 +89,17 @@ export type CoreLogic = {
     label: string;
   }) => void;
   handleEditClick: (mode: EditModes) => void;
+  editMode: EditModes;
+  editCard: string;
+  data: ResumeData;
+  inputRefsList: Record<EditModes, RefObject<HTMLInputElement>>;
+  isLoading: LoadingType;
   isEditContact: boolean;
-  setEditCard: Dispatch<SetStateAction<CardList>>;
-  onSaveEditCard: () => void;
-  onCancelEditCard: () => void;
   isEditSummary: boolean;
   isEditSkills: boolean;
   isEditLanguages: boolean;
-  inputRefsList: Record<EditModes, RefObject<HTMLInputElement>>;
-  isLoading: LoadingType;
-  setIsLoading: Dispatch<SetStateAction<LoadingType>>;
-  saveData: () => void;
+  isEditExperience: boolean;
+  isEditProjects: boolean;
 };
 
 export type LoadingType = {

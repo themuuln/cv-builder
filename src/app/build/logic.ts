@@ -164,6 +164,8 @@ const useLogic = (): CoreLogic => {
   const isEditSummary = editCard === 'My Profile';
   const isEditSkills = editCard === 'Skills';
   const isEditLanguages = editCard === 'Languages';
+  const isEditExperience = editCard === 'Experience';
+  const isEditProjects = editCard === 'Projects';
 
   return {
     editMode,
@@ -180,6 +182,8 @@ const useLogic = (): CoreLogic => {
     isEditSummary,
     isEditSkills,
     isEditLanguages,
+    isEditExperience,
+    isEditProjects,
     inputRefsList,
     isLoading,
     setIsLoading,
