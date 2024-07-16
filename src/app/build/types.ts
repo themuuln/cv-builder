@@ -25,9 +25,10 @@ export type ResumeData = {
   name: string;
   jobTitle: string;
   location: string;
+  isRelocate: boolean;
   phoneNumber: number | null;
   email: string;
-  languages: string;
+  languages: string[];
   education: {
     field: string;
     school: string;
@@ -52,11 +53,7 @@ export type ResumeData = {
     endDate: Date;
     link: string;
   }[];
-  skills: {
-    languages: string[];
-    technologies: string[];
-    tools: string[];
-  };
+  skills: string[];
 } | null;
 
 export type InputRefType = ElementRef<'input'>;
@@ -65,6 +62,7 @@ export type CoreLogic = {
   editMode: EditModes;
   editCard: string;
   data: ResumeData;
+  setData: Dispatch<SetStateAction<ResumeData>>;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
   handleValueChange: ({
     e,
@@ -81,4 +79,13 @@ export type CoreLogic = {
   isEditSummary: boolean;
   isEditSkills: boolean;
   inputRefsList: Record<EditModes, RefObject<HTMLInputElement>>;
+  isLoading: LoadingType;
+  setIsLoading: Dispatch<SetStateAction<LoadingType>>;
+  saveData: () => void;
+};
+
+export type LoadingType = {
+  value: boolean;
+  action: boolean;
+  hasFetched: boolean;
 };

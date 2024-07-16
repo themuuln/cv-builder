@@ -5,14 +5,16 @@ import Checkbox from '@/components/ui/checkbox';
 import Input from '@/components/ui/input-custom';
 import { Label } from '@/components/ui/label';
 import { isEmpty } from '@/lib/utils';
+import type { FC } from 'react';
 import NoData from '../../no-data';
+import Skeleton from '@/components/ui/skeleton';
 
 type ContactProps = {
   l: CoreLogic;
   data: ResumeData;
 };
 
-const Contact: React.FC<ContactProps> = ({ l, data }): JSX.Element => {
+const Contact: FC<ContactProps> = ({ l, data }): JSX.Element => {
   return (
     <Card className={`${l.isEditContact ? 'border-blue-500' : ''}`}>
       <CardEditHeader setCardEdit={l.setEditCard} title='Contact' />
@@ -30,7 +32,9 @@ const Contact: React.FC<ContactProps> = ({ l, data }): JSX.Element => {
               />
             ) : (
               <>
-                {isEmpty(data?.location) ? (
+                {l.isLoading.value ? (
+                  <Skeleton className='h-[20px] w-[150px]' />
+                ) : isEmpty(data?.location) ? (
                   <NoData>(no location)</NoData>
                 ) : (
                   <p>{data?.location}</p>
@@ -40,7 +44,15 @@ const Contact: React.FC<ContactProps> = ({ l, data }): JSX.Element => {
           </div>
 
           <div className='flex items-center space-x-2'>
-            <Checkbox id='relocation' />
+            <Checkbox
+              checked={data?.isRelocate}
+              onCheckedChange={(e) => {
+                // @ts-ignore
+                l.setData({ ...l.data, isRelocate: e });
+                l.saveData();
+              }}
+              id='relocation'
+            />
             <Label>I’m open to relocation</Label>
           </div>
 
@@ -60,7 +72,9 @@ const Contact: React.FC<ContactProps> = ({ l, data }): JSX.Element => {
               />
             ) : (
               <>
-                {isEmpty(data?.phoneNumber) ? (
+                {l.isLoading.value ? (
+                  <Skeleton className='h-[20px] w-[100px]' />
+                ) : isEmpty(data?.phoneNumber) ? (
                   <NoData>(no phone)</NoData>
                 ) : (
                   <p>{data?.phoneNumber}</p>

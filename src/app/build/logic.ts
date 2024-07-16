@@ -9,26 +9,36 @@ import {
   type RefObject,
 } from 'react';
 import { toast } from 'sonner';
-import { EditModes, type CoreLogic, type ResumeData } from './types';
+import {
+  EditModes,
+  type CoreLogic,
+  type LoadingType,
+  type ResumeData,
+} from './types';
 
 const useLogic = (): CoreLogic => {
   const { user } = useAuth();
   const [editCard, setEditCard] = useState<string>('');
   const [editMode, setEditMode] = useState<EditModes>(EditModes.NONE);
-  const [hasFetched, setHasFetched] = useState<boolean>(false);
   const [data, setData] = useState<ResumeData>({
     id: null,
     name: '',
     jobTitle: '',
     location: '',
+    isRelocate: false,
     phoneNumber: null,
     email: '',
-    languages: '',
+    languages: [''],
     education: [],
     summary: '',
     experience: [],
     projects: [],
-    skills: { languages: [''], technologies: [''], tools: [''] },
+    skills: [],
+  });
+  const [isLoading, setIsLoading] = useState<LoadingType>({
+    value: false,
+    action: false,
+    hasFetched: false,
   });
 
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -56,22 +66,26 @@ const useLogic = (): CoreLogic => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase
-        .from('resume-data')
-        .select('*')
-        .eq('owner', user.id);
+      if (user?.id && !isLoading?.hasFetched) {
+        setIsLoading({ ...isLoading, value: true });
+        const { data, error } = await supabase
+          .from('resume-data')
+          .select('*')
+          .eq('owner', user?.id);
 
-      if (error) {
-        toast.error('Error fetching data');
-        return;
+        if (error) {
+          toast.error('Error fetching data');
+          return;
+        } else {
+          setIsLoading({ ...isLoading, value: false, hasFetched: true });
+        }
+
+        setData(data[0]);
       }
-
-      console.log(`💻 ~ file: logic.ts:151 ~ fetchData ~ data:`, data);
-      setData(data[0]);
     };
 
-    fetchData().then(() => setHasFetched(true));
-  }, [supabase, hasFetched, user]);
+    fetchData();
+  }, [supabase, isLoading.hasFetched, user]);
 
   const handleEditClick = async (mode: EditModes) => {
     await setEditMode(mode);
@@ -151,6 +165,7 @@ const useLogic = (): CoreLogic => {
     editMode,
     editCard,
     data,
+    setData,
     handleKeyDown,
     handleValueChange,
     handleEditClick,
@@ -161,6 +176,9 @@ const useLogic = (): CoreLogic => {
     isEditSummary,
     isEditSkills,
     inputRefsList,
+    isLoading,
+    setIsLoading,
+    saveData,
   };
 };
 

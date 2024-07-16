@@ -20,7 +20,7 @@ export default [
     rules: {
       ...eslintConfigPrettier.rules,
       'prettier/prettier': [
-        'error',
+        'warn',
         {
           jsxSingleQuote: true,
           singleQuote: true,
